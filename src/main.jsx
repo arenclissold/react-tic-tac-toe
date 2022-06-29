@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'
+import { GrPowerReset } from 'react-icons/gr';
 
 function Square(props) {
   return (
@@ -14,6 +15,7 @@ class Board extends React.Component {
   renderSquare(i) {
     return (
       <Square
+      key={i}
       value={this.props.squares[i]}
       onClick={() => this.props.onClick(i)}
       />
@@ -23,23 +25,22 @@ class Board extends React.Component {
   render() {
     return (
       <div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
+        {
+          Array(3).fill(null).map((item, row) => {
+            return (
+              <div className="board-row" key={row}>
+                {
+                  Array(3).fill(null).map((item, col) => {
+                    const i = (((row * 3) + 1) + (col + 1)) - 1
+                    return (this.renderSquare(i))
+                  })
+                }
+              </div>
+            )
+          })
+        }
       </div>
-    );
+    )
   }
 }
 
@@ -51,7 +52,8 @@ class Game extends React.Component {
         squares: Array(9).fill(null)
       }],
       stepNumber: 0,
-      xIsNext: true
+      xIsNext: true,
+      reverseMoves: false
     }
   }
 
@@ -72,28 +74,56 @@ class Game extends React.Component {
     })
   }
 
+  reset() {
+    this.setState({
+      history: [{
+        squares: Array(9).fill(null)
+      }],
+      stepNumber: 0,
+      xIsNext: true,
+      reverseMoves: false
+    })
+  }
+
+  reverse() {
+    this.setState({reverseMoves: !this.state.reverseMoves })
+  }
+
   jumpTo(step) {
     this.setState({
       stepNumber: step,
-      xIsNext: (step % 2) === 0
+      xIsNext: (step % 2) === 0,
     })
   }
 
   render() {
     const history = this.state.history
+
+
     const current = history[this.state.stepNumber]
     const winner = calculateWinner(current.squares)
 
     const moves = history.map((step, move) => {
-      const desc = move ?
-        'Go to move #' + move :
-        'Go to game start'
+      if (this.state.reverseMoves) move = Math.abs(move - history.length + 1)
+      const isActive = move === this.state.stepNumber ? 'active' : ''
       return (
         <li key={move}>
-            <button onClick={() => this.jumpTo(move)}>{desc}</button>
+            <button className={isActive} onClick={() => this.jumpTo(move)}>{move}</button>
         </li>
       )
     })
+
+    const ResetButton = () => {
+      return (
+        <button className='bg-red-400 rounded-3xl h-11 w-11 flex items-center justify-center' onClick={() => this.reset()}><GrPowerReset size='30' /></button>
+      )
+    }
+
+    const ReverseButton = () => {
+      return (
+        <button className='font-bold bg-blue-300 px-2 py-2 rounded my-4' onClick={() => this.reverse()}>Reverse Moves</button>
+      )
+    }
 
     let status;
     if (winner) {
@@ -104,16 +134,20 @@ class Game extends React.Component {
 
 
     return (
-      <div className="game">
-        <div className="game-board">
-          <Board
-          squares={current.squares}
-          onClick={(i) => this.handleClick(i)}
-          />
-        </div>
-        <div className="game-info">
-          <div>{status}</div>
-          <ol>{moves}</ol>
+      <div className='flex flex-col items-center'>
+        <div className='flex items-center'><h2 className='text-center bg-blue-300 text-lg rounded px-3 py-2 m-3'>{status}</h2><ResetButton /></div>
+
+        <div className="game">
+          <div className="game-board">
+            <Board
+            squares={current.squares}
+            onClick={(i) => this.handleClick(i)}
+            />
+          </div>
+          <div className="game-info">
+            <ReverseButton />
+            <ol>{moves}</ol>
+          </div>
         </div>
       </div>
     );
@@ -142,4 +176,5 @@ function calculateWinner(squares) {
 
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
 root.render(<Game />);

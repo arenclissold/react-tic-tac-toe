@@ -1,14 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .active {
+    @apply bg-green-400;
+  }
+}
+
 body {
-  font: 14px "Century Gothic", Futura, sans-serif;
-  margin: 20px;
+  /* font: 14px "Century Gothic", Futura, sans-serif; */
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  background-color: #3a86ff;
+  min-height: 100vh;
+  margin: 0px;
 }
 
 ol, ul {
   padding-left: 30px;
+}
+
+.container {
+  background: #fff;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 20px;
+}
+
+.game {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin-bottom: 50px;
+}
+
+@media screen and (min-width: 992px) {
+  .game {
+    flex-direction: row;
+  }
 }
 
 .board-row:after {
@@ -17,22 +51,39 @@ ol, ul {
   display: table;
 }
 
-.status {
-  margin-bottom: 10px;
-}
-
 .square {
   background: #fff;
-  border: 3px solid #999;
+  border: none;
   float: left;
   font-size: 70px;
   font-weight: bold;
   line-height: 100px;
   height: 100px;
-  margin: -3px;
+  margin: 5px;
   padding: 0;
   text-align: center;
   width: 100px;
+  background-color: #8338ec;
+  transition: all 0.3s;
+  color: white;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.158);
+}
+
+.square:hover {
+  border-radius: 15px;
+}
+
+.board-row:nth-of-type(1) .square:first-child {
+  border-top-left-radius: 15px;
+}
+.board-row:nth-of-type(1) .square:last-child {
+  border-top-right-radius: 15px;
+}
+.board-row:nth-of-type(3) .square:first-child {
+  border-bottom-left-radius: 15px;
+}
+.board-row:nth-of-type(3) .square:last-child {
+  border-bottom-right-radius: 15px;
 }
 
 .square:focus {
@@ -43,15 +94,31 @@ ol, ul {
   background: #ddd;
 }
 
-.game {
-  display: flex;
-  flex-direction: row;
-}
-
 .game-info {
   margin-left: 20px;
 }
+ol {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+
+}
+
+li button {
+    background-color: #4895ef;
+    border: none;
+    width: 50px;
+    height: 50px;
+    font-weight: 700;
+    color: white;
+    font-size: large;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.158);
+
+}
 
 h1 {
-  font-size: 50px
+  font-size: 50px;
+  font-weight: 400
 }

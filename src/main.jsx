@@ -26,12 +26,12 @@ class Board extends React.Component {
     return (
       <div>
         {
-          Array(3).fill(null).map((item, row) => {
+          [...Array(3).keys()].map((row) => {
             return (
               <div className="board-row" key={row}>
                 {
-                  Array(3).fill(null).map((item, col) => {
-                    const i = (((row * 3) + 1) + (col + 1)) - 1
+                  [...Array(3).keys()].map((col) => {
+                    const i = (row * 3) + col
                     return (this.renderSquare(i))
                   })
                 }
@@ -61,6 +61,7 @@ class Game extends React.Component {
     const history = this.state.history.slice(0, this.state.stepNumber + 1)
     const current = history[history.length - 1]
     const squares = current.squares.slice()
+    console.log(squares)
     if (calculateWinner(squares) || squares[i]) {
       return
     }
@@ -80,8 +81,7 @@ class Game extends React.Component {
         squares: Array(9).fill(null)
       }],
       stepNumber: 0,
-      xIsNext: true,
-      reverseMoves: false
+      xIsNext: true
     })
   }
 

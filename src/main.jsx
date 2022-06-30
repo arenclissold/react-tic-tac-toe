@@ -108,7 +108,7 @@ class Game extends React.Component {
 
     const moves = history.map((step, move) => {
       if (this.state.reverseMoves) move = Math.abs(move - history.length + 1)
-      const isActive = move === this.state.stepNumber ? 'bg-green-400' : ''
+      const isActive = move === this.state.stepNumber ? 'bg-green-400' : 'hover:bg-blue-500'
       return (
         <li key={move}>
             <button className={isActive} onClick={() => this.jumpTo(move)}>{move}</button>
@@ -124,13 +124,17 @@ class Game extends React.Component {
 
       const ReverseButton = () => {
         return (
-          <button className='font-bold bg-blue-300 px-2 py-2 rounded my-4' onClick={() => this.reverse()}>Reverse Moves</button>
+          <button
+          className='bg-blue-400 text-white px-2 py-2 rounded my-4 transition-all hover:bg-blue-500'
+          onClick={() => this.reverse()}>Reverse Moves</button>
           )
         }
 
         let status;
         if (winner) {
           status = 'Winner: ' + winner.winner
+        } else if (!current.squares.includes(null)) {
+          status = 'Draw!'
         } else {
           status = `Next player: ${this.state.xIsNext ? 'X' : 'O'}`;
         }
@@ -138,7 +142,7 @@ class Game extends React.Component {
 
         return (
           <div className='flex flex-col items-center'>
-        <div className='flex items-center'><h2 className='text-center bg-blue-300 text-lg rounded px-3 py-2 m-3'>{status}</h2><ResetButton /></div>
+        <div className='flex items-center'><h2 className='text-center bg-blue-400 text-white text-lg rounded px-3 py-2 m-3'>{status}</h2><ResetButton /></div>
 
         <div className="game">
           <div className="game-board">
@@ -150,7 +154,7 @@ class Game extends React.Component {
           </div>
           <div className="game-info">
             <ReverseButton />
-            <ol>{moves}</ol>
+            <ol className='list-none p-0'>{moves}</ol>
           </div>
         </div>
       </div>

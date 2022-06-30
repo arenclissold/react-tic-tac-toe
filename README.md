@@ -2,11 +2,8 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/arenclissold/react-tic-tac-toe" style='font-size: 50px'>
-    👾
-  </a>
 
-<h1 align="center">React Tic Tac Toe</h3>
+<h1 align="center">React Tic Tac Toe 👾</h1>
 
   <p align="center">
     Made while learning React ⚛️
